@@ -1,0 +1,70 @@
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #10b981;
+    --danger: #ef4444;
+}
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0f172a;
+    color: #f8fafc;
+}
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+.glass-card {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.gradient-text {
+    background: var(--primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.neumorphic-btn {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2),
+               -5px -5px 10px rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+.neumorphic-btn:hover {
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2),
+               -2px -2px 5px rgba(255, 255, 255, 0.05);
+}
+.transaction-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+}
+.pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+.floating {
+    animation: floating 6s ease-in-out infinite;
+}
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.receita {
+    background-color: #10b981;
+    padding: 11px;
+    border-radius: 11px;
+}
+
+.despesa {
+    background-color: #ef4444;
+    padding: 11px;
+    border-radius: 11px;
+}

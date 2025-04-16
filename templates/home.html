@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Finance | Gestão Financeira Inteligente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/styles/principal.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold gradient-text">Neurora Finance</h1>
+                    <p class="text-slate-400 text-sm">Controle financeiro simplificado</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button id="reportBtn" class="glass-card px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-slate-800 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Relatórios</span>
+                </button>
+                <div class="glass-card p-2 rounded-full">
+                    <button onclick="logOut()">
+                        <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">E</div>
+                    </button>
+                    <script>
+                        async function logOut() {
+                            fetch('/financeiro/logout', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(response => {
+                                if (response.redirected) {
+                                    location.reload();
+                                } else {
+                                    console.log('Erro ou login inválido');
+                                }
+                            });
+                        }
+                    </script>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Column -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Balance Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="glass-card p-5 rounded-xl">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-indigo-900 bg-opacity-30 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-slate-400 text-sm">Saldo Atual</p>
+                                <h2 class="text-xl font-bold">R$ {{ atual }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card p-5 rounded-xl">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-green-900 bg-opacity-30 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-slate-400 text-sm">Receitas</p>
+                                <h2 class="text-xl font-bold text-green-400">R$ {{ receita }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card p-5 rounded-xl">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-red-900 bg-opacity-30 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-slate-400 text-sm">Despesas</p>
+                                <h2 class="text-xl font-bold text-red-400">R$ {{ despesas }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Financial Chart -->
+                <div class="glass-card p-6 rounded-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold">Visão Financeira</h2>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="financeChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Quick Transaction -->
+                <div class="glass-card p-6 rounded-xl">
+                    <h2 class="text-xl font-semibold mb-4">Nova Transação</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-1">Título</label>
+                            <input type="text" class="w-full glass-card px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="O que foi?" id="titulo">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-1">Valor</label>
+                            <input 
+                                type="text" 
+                                class="w-full glass-card px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                                placeholder="R$ 0,00" 
+                                id="valor"
+                                oninput="formatarVisualmente(this)"
+>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-1">Categoria</label>
+                            <select class="w-full glass-card px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" id="categoria">
+                                <option value="">Selecione...</option>
+                                <option value="Conta - Casa">Conta - Casa</option>
+                                <option value="Alimentacao">Alimentação</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Lazer">Lazer</option>
+                                <option value="Saude">Saúde</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-1">Método</label>
+                            <select class="w-full glass-card px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" id="metodo">
+                                <option value="">Selecione...</option>
+                                <option value="Pix">Pix</option>
+                                <option value="Transferencia">Transferencia</option>
+                                <option value="Dinheiro">Dinheiro</option>
+                                <option value="Cartao">Cartão</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-1">Tipo</label>
+                            <div class="flex space-x-4">
+                                <div class="receita">
+                                    <input type="radio" name="tipo" id="receita" value="receita">
+                                    <label for="receita">Receita</label>
+                                </div>
+                                <div class="despesa">
+                                    <input type="radio" name="tipo" id="despesa" value="despesa">
+                                    <label for="despesa">Despesa</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-full mt-6 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-3 px-4 rounded-lg transition neumorphic-btn" onclick="includeTransaction()">
+                        Adicionar Transação
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="space-y-6">
+                <!-- Recent Transactions -->
+                <div class="glass-card p-6 rounded-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold">Transações Recentes</h2>
+                        <button id="verTodasBtn" class="text-indigo-400 hover:text-indigo-300 text-sm flex items-center">
+                            <span id="verTodasTexto">Ver todas</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-3">
+
+                    </div>
+                </div>
+                
+                <!-- Expense Categories -->
+                <div class="glass-card p-6 rounded-xl">
+                    <h2 class="text-xl font-semibold mb-4">Categorias de Gastos</h2>
+                    <div class="h-48">
+                        <canvas id="categoriesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reports Modal -->
+    <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="glass-card rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold gradient-text">Gerar Relatório</h2>
+                    <button id="closeReportModal" class="text-slate-400 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="space-y-6">
+                    <form action="/relatorio/pdf" method="POST" target="_blank" id='formRelatorio'>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Período</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-slate-400 mb-1">Data Inicial</label>
+                                <input type="date" class="w-full glass-card px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-slate-400 mb-1">Data Final</label>
+                                <input type="date" class="w-full glass-card px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Filtros</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-slate-400 mb-1">Tipo</label>
+                                <select class="w-full glass-card px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option>Todos</option>
+                                    <option>Receitas</option>
+                                    <option>Despesas</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-slate-400 mb-1">Categoria</label>
+                                <select class="w-full glass-card px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option>Todas</option>
+                                    <option>Moradia</option>
+                                    <option>Alimentação</option>
+                                    <option>Transporte</option>
+                                    <option>Lazer</option>
+                                    <option>Saúde</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Formato</h3>
+                        <div class="flex space-x-4">
+                            <button class="flex-1 glass-card px-4 py-3 rounded-lg flex items-center justify-center space-x-2 border border-indigo-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <span>PDF</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full mt-6 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-3 px-4 rounded-lg transition neumorphic-btn" type="submit">
+                        Gerar Relatório
+                    </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../static/scripts/principal.js"></script>
+    <script>document.getElementById('formRelatorio').addEventListener('submit', () => {
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000); // dá 1 segundo pro navegador abrir o PDF
+    });</script>
+</body>
+</html>

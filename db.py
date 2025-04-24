@@ -1,9 +1,10 @@
-import mysql.connector
+import pymysql
 
 def get_db_connection():
-    return mysql.connector.connect(
+    return pymysql.connect(
         host='localhost',
-        user='prod',
-        password='prod01',
-        database='transacoes'
+        user='user,
+        password='senha',
+        database='tabela',
+        cursorclass=pymysql.cursors.DictCursor
     )

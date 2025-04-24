@@ -5,7 +5,7 @@ from db import get_db_connection
 def add_new_transaction(titulo, valor, categoria, metodo, tipo):
     data = datetime.now().strftime('%d/%m/%Y')
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     cursor.execute("INSERT INTO transacoes (tipo, valor, data, titulo, categoria, metodo) VALUES (%s, %s, %s, %s, %s, %s)",
                     (tipo, valor, data, titulo, categoria, metodo))
     conn.commit()

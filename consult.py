@@ -4,7 +4,7 @@ from db import get_db_connection
 
 def consult_despesas():
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     query = "SELECT SUM(valor) FROM transacoes WHERE tipo = 'despesa'"
     cursor.execute(query)
     resultado = cursor.fetchone()
@@ -15,7 +15,7 @@ def consult_despesas():
 
 def consult_receita():
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     query = "SELECT SUM(valor) FROM transacoes WHERE tipo = 'receita'"
     cursor.execute(query)
     resultado = cursor.fetchone()
@@ -26,7 +26,7 @@ def consult_receita():
 
 def consult_atual():
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     query = "SELECT SUM(valor) FROM transacoes WHERE tipo = 'despesa'"
     cursor.execute(query)
     resultado2 = cursor.fetchone()
@@ -43,7 +43,7 @@ def consult_atual():
 
 def consult_categorias_despesas():
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     cursor.execute("""
         SELECT categoria, SUM(valor) 
         FROM transacoes 
@@ -59,7 +59,7 @@ def consult_categorias_despesas():
 
 def consult_ultimas_transacoes():
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
 
     cursor.execute("""
         SELECT titulo, valor, categoria, metodo, tipo, data
@@ -75,10 +75,10 @@ def consult_ultimas_transacoes():
 def consult_grafico_financeiro(data_inicio):
 
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     cursor.execute("""
     SELECT 
-        DATE_FORMAT(data_formatada, '%Y-%m') as mes,
+        DATE_FORMAT(data_formatada, '%%Y-%%m') as mes,
         tipo,
         SUM(valor) as total
     FROM transacoes
@@ -94,7 +94,7 @@ def consult_grafico_financeiro(data_inicio):
 
 def consult_novo_relatorio(data_inicio, data_fim, tipo, categoria):
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     # Monta filtro SQL dinamicamente
     query = "SELECT * FROM transacoes WHERE 1=1"
     params = []
@@ -113,7 +113,7 @@ def consult_novo_relatorio(data_inicio, data_fim, tipo, categoria):
         params.append(categoria)
 
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     cursor.execute(query, tuple(params))
     transacoes = cursor.fetchall()
     cursor.close()
@@ -123,7 +123,7 @@ def consult_novo_relatorio(data_inicio, data_fim, tipo, categoria):
 
 def verificar_usuario(usuario, senha):
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     cursor.execute("SELECT token FROM usuarios WHERE usuario = %s AND senha = %s", (usuario, senha))
     token = cursor.fetchone()
     cursor.close()
